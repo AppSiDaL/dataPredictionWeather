@@ -1,0 +1,11 @@
+.app {
+  background-color: #282c34;
+  background-image: url(https://media.istockphoto.com/id/1134160027/es/foto/fondo-de-naturaleza-abstracta-espectacular-cielo-azul-con-coloridas-nubes-anaranjadas-de.jpg?b=1&s=170667a&w=0&k=20&c=UbMNn2BsOc7YajMHKMc1BRx8kDqic3y2vJjZfvV7x2A=);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
