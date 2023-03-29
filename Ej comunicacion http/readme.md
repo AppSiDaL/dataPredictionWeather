@@ -1,0 +1,1 @@
+Ejemplo de comunicacion bidireccional usando ESP8266 y peticiones HTTP mediante un servidor local.
