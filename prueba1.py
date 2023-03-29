@@ -26,8 +26,8 @@ dataset = dataset.astype('float32')
 scaler = MinMaxScaler(feature_range=(0, 1))
 dataset = scaler.fit_transform(dataset)
 # dividimos entre entranmiento y test
-train_size = int(len(dataset) * 0.67)
-test_size = len(dataset) - train_size
+train_size = int(len(dataset) * 0.37)
+test_size = 3000 - train_size
 train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
 # remodelamos X=t y Y=t+1
 look_back = 1
