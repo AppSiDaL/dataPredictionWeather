@@ -1,11 +1,77 @@
-.app {
+.app-sunset{
   background-color: #282c34;
   background-image: url(https://media.istockphoto.com/id/1134160027/es/foto/fondo-de-naturaleza-abstracta-espectacular-cielo-azul-con-coloridas-nubes-anaranjadas-de.jpg?b=1&s=170667a&w=0&k=20&c=UbMNn2BsOc7YajMHKMc1BRx8kDqic3y2vJjZfvV7x2A=);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.app-sunrise{
+  background-color: #282c34;
+  background-image: url(https://images.pexels.com/photos/4517020/pexels-photo-4517020.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.app-day{
+  background-color: #282c34;
+  background-image: url(https://www.yateenteraste.mx/wp-content/uploads/2022/05/cie.jpeg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.app-night{
+  background-color: #282c34;
+  background-image: url(assets/cloudy-full-moon-moonlight-night-dark-sky-fullmoon.png);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.app-rainy{
+  background-color: #282c34;
+  background-image: url(https://nexodiario.com/wp-content/uploads/2017/03/Cielo_Nublado.jpg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+
+.city {
+  line-height: 20px;
+}
+
+.temperatura {
+  line-height: 0px;
+  font-size: calc(80px);
+}
+.clima {
+  line-height: 0px;
 }
