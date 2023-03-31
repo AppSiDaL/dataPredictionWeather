@@ -1,8 +1,21 @@
+.grid-container {
+  display: grid;
+  font-size: calc(10px + 2vmin);
+  grid-template-columns: repeat(24, 200px);
+  grid-template-rows: 1;
+  margin: 4px, 4px;
+  padding: 4px;
+  width:80%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
 .app-sunset{
   background-color: #282c34;
   background-image: url(https://media.istockphoto.com/id/1134160027/es/foto/fondo-de-naturaleza-abstracta-espectacular-cielo-azul-con-coloridas-nubes-anaranjadas-de.jpg?b=1&s=170667a&w=0&k=20&c=UbMNn2BsOc7YajMHKMc1BRx8kDqic3y2vJjZfvV7x2A=);
-  min-height: 100vh;
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
   font-size: calc(10px + 2vmin);
@@ -36,6 +49,7 @@
   background-repeat: no-repeat;
 }
 
+
 .app-night{
   background-color: #282c34;
   background-image: url(assets/cloudy-full-moon-moonlight-night-dark-sky-fullmoon.png);
@@ -44,7 +58,7 @@
   flex-direction: column;
   align-items: center;
   font-size: calc(10px + 2vmin);
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   background-size: cover;
   background-repeat: no-repeat;
 }
