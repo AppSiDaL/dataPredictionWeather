@@ -1,13 +1,19 @@
 import "./App.css";
-import axios from 'axios';
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { faCompass, faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloud, faCloudBolt, faCloudRain,  faWater, faWind } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCloud,
+  faCloudBolt,
+  faCloudRain,
+  faWater,
+  faWind,
+} from "@fortawesome/free-solid-svg-icons";
 import { faDroplet } from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { Line } from "react-chartjs-2";
-import Chart from 'chart.js/auto';
+import Chart from "chart.js/auto";
 import { faCloudscale } from "@fortawesome/free-brands-svg-icons";
 function App() {
   var today = new Date();
@@ -93,7 +99,7 @@ function App() {
     style: { animationDuration: "5s", color: "black" },
     size: "2xl",
   });
-  
+
   const moon = React.createElement(FontAwesomeIcon, {
     icon: faMoon,
     beat: true,
@@ -127,7 +133,7 @@ function App() {
   });
   const wind = React.createElement(FontAwesomeIcon, {
     icon: faWind,
-    beatFade:true,
+    beatFade: true,
     style: { animationDuration: "2s", color: "white" },
     size: "5x",
   });
@@ -137,12 +143,12 @@ function App() {
     style: { animationDuration: "5s", color: "red" },
     size: "5x",
   });
-  var weatherIcon=cloudRain;
-  /*if (tiempo==="Noche") {
+  var weatherIcon = cloudRain;
+  if (tiempo==="Noche") {
     weatherIcon=moon;
   }else{
      weatherIcon = sunny;
-  }*/
+  }
 
   temporal = new Date();
   var horas = temporal.getHours();
@@ -175,42 +181,46 @@ function App() {
     responsive: true,
     plugins: {
       legend: {
-        display:false,
+        display: false,
       },
       title: {
         display: true,
-        text: 'Temperatura Minima y Maxima',
+        text: "Temperatura Minima y Maxima",
       },
     },
     animations: {
       tension: {
         duration: 2000,
-        easing: 'easeInBack',
+        easing: "easeInBack",
         from: 1,
         to: 0,
-        loop: true
-      }
+        loop: true,
+      },
     },
   };
+  const [ultimaRespuesta, setUltimaRespuesta] = useState(null);
+  const [actualTemperatura, setactualTemperatura] = useState(null);
 
-  axios.get('http://localhost/weatherStation/obtain.php')
-  .then(response => {
-    console.log(response.data);
-    const ultimaRespuesta=JSON.parse(response);
-    console.log(ultimaRespuesta);
-  })
-  
-  .catch(error => {
-    console.error(error);
-  });
-
+  useEffect(() => {
+    axios
+      .get("http://localhost/weatherStation/obtain.php")
+      .then(function (response) {
+        var data = response.data;
+        var i = data.length - 1;
+        var ultimaRespuesta = data[i]["time"];
+        setactualTemperatura(data[i]["tempeture"]);
+        setUltimaRespuesta(ultimaRespuesta);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
-    
     <div className={hora}>
       <h3 className="city">TESJo</h3>
       <p>{now}</p>
-      <p className="temperatura">25/7º</p>
+      <p className="temperatura">{actualTemperatura+"º"}</p>
       <p className="clima">{tiempo}</p>
       <div className="grid-container">
         <div>
@@ -441,9 +451,7 @@ function App() {
           <p>748 var</p>
         </div>
       </div>
-        <div>
-
-        </div>
+      <div>La ultima respuesta del servidor fue a las:{" "+ultimaRespuesta}</div>
     </div>
   );
 }
