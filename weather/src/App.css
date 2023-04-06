@@ -1,22 +1,38 @@
-.confort {
-  align-items: center;
-  text-align: center;
-  width: 80%;
-}
-.elementos {
-  float:left;
-  padding: 9%;
-  height: 5%;
-  align-items: center;
+.climaValue {
   text-align: center;
 }
 
+.confort {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  grid-gap: 5px;
+}
+.confort >div {
+  width: auto;
+  font-size: 30px;
+  padding: .5em;
+  color: #ffffff;
+  background: #2e3438;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .confort {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+}
 .clima-chart {
   align-items: center;
   position: relative;
   margin: auto;
   height: 70vh;
   width: 70vw;
+}
+
+@media (max-width: 768px) {
+  .clima-chart {
+    height: 30vh;
+  }
 }
 
 .grid-container {
@@ -78,7 +94,7 @@
 }
 
 .app-sunrise {
-  background-color: #ee9975;  
+  background-color: #ee9975;
   background-image: url(https://us.123rf.com/450wm/taiga/taiga1608/taiga160800061/64521691-incre%C3%ADble-fondo-de-cielo-del-amanecer-con-los-colores-suaves-de-las-nubes-suaves-tama%C3%B1o-grande.jpg);
   min-height: 100vh;
   display: flex;
@@ -112,7 +128,7 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: rgb(255, 255, 255);
-  background-size:contain;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 
