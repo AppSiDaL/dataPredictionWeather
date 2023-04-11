@@ -205,16 +205,32 @@ function App() {
       },
     },
   };
-  const [ultimaRespuesta, setUltimaRespuesta] = useState(null);
-  const [actualTemperatura, setactualTemperatura] = useState(null);
+  const [valores, setvalores] = useState([]);
   const [temperaturas, setTemperaturas] = useState([]);
   const [lluvias, setlluvias] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost/weatherStation/obtain.php")
+      .then(function (response) {
+        const datos = [];
+        const nombres=["time","type","direction","humidity","rain","ligth","pressure","tempeture","speed","probabilidad"]
+        for (let i = 0; i <= nombres.length; i++) {
+          var indice = nombres[i];
+          const data = response.data[0][indice];
+          datos.push(data);
+        }
+        setvalores(datos);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }, []);
   useEffect(() => {
     axios
       .get("http://localhost/weatherStation/getNextLluvias.php")
       .then(function (response) {
         const nuevasLluvias = [];
-        for (let i = 1; i <= 23; i++) {
+        for (let i = 1; i <= 24; i++) {
           const lluvia = response.data[i - 1].probabilidad;
           nuevasLluvias.push(lluvia);
         }
@@ -230,7 +246,7 @@ function App() {
       .get("http://localhost/weatherStation/getNextHours.php")
       .then(function (response) {
         const nuevasTemperaturas = []; 
-        for (let i = 1; i <= 23; i++) {
+        for (let i = 1; i <= 24; i++) {
           const temperatura = response.data[i-1].tempeture;
           nuevasTemperaturas.push(temperatura);
         }
@@ -241,20 +257,7 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost/weatherStation/obtain.php")
-      .then(function (response) {
-        var data = response.data;
-        var i = data.length - 1;
-        var ultimaRespuesta = data[i]["time"];
-        setactualTemperatura(data[i]["tempeture"]);
-        setUltimaRespuesta(ultimaRespuesta);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+
 
   function setIcon(probabilidad) {
     if (probabilidad >= 40 && probabilidad < 70 && tiempo !== "Noche") {
@@ -278,7 +281,7 @@ function App() {
     <div className={hora}>
       <h3 className="city">TESJo</h3>
       <p>{now}</p>
-      <p className="temperatura">{actualTemperatura + "º"}</p>
+      <p className="temperatura">{valores[7] + "º"}</p>
       <p className="clima">{tiempo}</p>
       <div className="grid-container">
         <div>
@@ -500,41 +503,41 @@ function App() {
         <div>
           <p>Humedad</p>
           {water}
-          <p>100%</p>
+          <p>{valores[3]} %</p>
         </div>
         <div>
           {" "}
           <p>Lluvia</p>
           {droplet}
-          <p>1mm3</p>
+          <p>{valores[4]} cm3</p>
         </div>
         <div className="elementos">
           {" "}
           <p>Luz</p>
           {lightBulb}
-          <p>46Lx</p>
+          <p>{valores[5]} Lx</p>
         </div>
         <div className="elementos">
           {" "}
           <p>Presion</p>
           {scale}
-          <p>748 var</p>
+          <p>{valores[6]} var</p>
         </div>
         <div className="elementos">
           {" "}
           <p>Velocidad Viento</p>
           {wind}
-          <p>748 var</p>
+          <p>{valores[8]} km/h</p>
         </div>
         <div className="elementos">
           {" "}
           <p>Direccion</p>
           {compass}
-          <p>748 var</p>
+          <p>{valores[2]} º</p>
         </div>
       </div>
       <div>
-        La ultima respuesta del servidor fue a las:{" " + ultimaRespuesta}
+        La ultima respuesta del servidor fue a las:{" " + valores[0]}
       </div>
     </div>
   );
