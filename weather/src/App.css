@@ -102,7 +102,7 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: rgb(0, 0, 0);
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 .app-day {

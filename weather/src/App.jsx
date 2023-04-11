@@ -214,7 +214,7 @@ function App() {
       .get("http://localhost/weatherStation/getNextLluvias.php")
       .then(function (response) {
         const nuevasLluvias = [];
-        for (let i = 1; i <= 24; i++) {
+        for (let i = 1; i <= 23; i++) {
           const lluvia = response.data[i - 1].probabilidad;
           nuevasLluvias.push(lluvia);
         }
@@ -229,9 +229,9 @@ function App() {
     axios
       .get("http://localhost/weatherStation/getNextHours.php")
       .then(function (response) {
-        const nuevasTemperaturas = [];
-        for (let i = 1; i <= 24; i++) {
-          const temperatura = response.data[i - 1].tempeture;
+        const nuevasTemperaturas = []; 
+        for (let i = 1; i <= 23; i++) {
+          const temperatura = response.data[i-1].tempeture;
           nuevasTemperaturas.push(temperatura);
         }
         setTemperaturas(nuevasTemperaturas);
@@ -257,7 +257,7 @@ function App() {
   }, []);
 
   function setIcon(probabilidad) {
-    if (probabilidad > 40 && probabilidad < 70 && tiempo !== "Noche") {
+    if (probabilidad >= 40 && probabilidad < 70 && tiempo !== "Noche") {
       weatherIcon = cloudSun;
     } else if (probabilidad > 40 && probabilidad > 70 && tiempo !== "Noche") {
       weatherIcon = cloudSunRain;
@@ -265,7 +265,7 @@ function App() {
       weatherIcon = cloudMoon;
     } else if (probabilidad > 40 && probabilidad > 70 && tiempo === "Noche") {
       weatherIcon = cloudMoonRain;
-    } else if (probabilidad < 40 && tiempo !== "Noche") {
+    } else if (probabilidad <= 40 && tiempo !== "Noche") {
       weatherIcon = sunny;
     } else {
       weatherIcon = moon;
@@ -425,7 +425,7 @@ function App() {
           <p className="climaValue">{lluvias[23] + "%"}</p>
           <p className="climaHour"> {fixHour(horas + 24)}</p>
         </div>
-      </div>
+      </div>  
       <div className="grid-container-days">
         <div className="climaIcon">
           {" "}
