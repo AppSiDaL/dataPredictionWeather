@@ -1,4 +1,6 @@
 import "./App.css";
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { faCompass, faMoon, faSun } from "@fortawesome/free-regular-svg-icons";
@@ -16,9 +18,9 @@ import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { faCloudscale } from "@fortawesome/free-brands-svg-icons";
+import Data from "./Data";
 function App() {
   var today = new Date();
-
   var time = today.getHours();
   var now = today.toLocaleString();
 
@@ -55,7 +57,7 @@ function App() {
   if (time >= anochecerTime) {
     hora = "app-night";
     tiempo = "Noche";
-  } 
+  }
   function fixHour(hour) {
     var system;
 
@@ -96,8 +98,8 @@ function App() {
   });
   const cloudSunRain = React.createElement(FontAwesomeIcon, {
     icon: faCloudSunRain,
-    beat: true,
-    style: { animationDuration: "5s", color: "gray" },
+    beatFade: true,
+    style: { animationDuration: "5s", color: "black" },
     size: "2xl",
   });
   const cloudMoonRain = React.createElement(FontAwesomeIcon, {
@@ -182,7 +184,7 @@ function App() {
   const options = {
     elements: {
       point: {
-        radius: 10,
+        radius: 7,
       },
     },
     responsive: true,
@@ -213,7 +215,18 @@ function App() {
       .get("http://localhost/weatherStation/obtain.php")
       .then(function (response) {
         const datos = [];
-        const nombres=["time","type","direction","humidity","rain","ligth","pressure","tempeture","speed","probabilidad"]
+        const nombres = [
+          "time",
+          "type",
+          "direction",
+          "humidity",
+          "rain",
+          "ligth",
+          "pressure",
+          "tempeture",
+          "speed",
+          "probabilidad",
+        ];
         for (let i = 0; i <= nombres.length; i++) {
           var indice = nombres[i];
           const data = response.data[0][indice];
@@ -224,13 +237,13 @@ function App() {
       .catch((error) => {
         console.error(error);
       });
-    }, []);
+  }, []);
   useEffect(() => {
     axios
       .get("http://localhost/weatherStation/getNextLluvias.php")
       .then(function (response) {
         const nuevasLluvias = [];
-        for (let i = 1; i <= 24; i++) {
+        for (let i = 1; i <= 23; i++) {
           const lluvia = response.data[i - 1].probabilidad;
           nuevasLluvias.push(lluvia);
         }
@@ -245,9 +258,9 @@ function App() {
     axios
       .get("http://localhost/weatherStation/getNextHours.php")
       .then(function (response) {
-        const nuevasTemperaturas = []; 
-        for (let i = 1; i <= 24; i++) {
-          const temperatura = response.data[i-1].tempeture;
+        const nuevasTemperaturas = [];
+        for (let i = 1; i <= 23; i++) {
+          const temperatura = response.data[i - 1].tempeture;
           nuevasTemperaturas.push(temperatura);
         }
         setTemperaturas(nuevasTemperaturas);
@@ -256,8 +269,6 @@ function App() {
         console.error(error);
       });
   }, []);
-
-
 
   function setIcon(probabilidad) {
     if (probabilidad >= 40 && probabilidad < 70 && tiempo !== "Noche") {
@@ -428,49 +439,56 @@ function App() {
           <p className="climaValue">{lluvias[23] + "%"}</p>
           <p className="climaHour"> {fixHour(horas + 24)}</p>
         </div>
-      </div>  
+      </div>
       <div className="grid-container-days">
         <div className="climaIcon">
           {" "}
           <p>{getDayWeek(0)}</p>
           <p>{getDate(0)}</p>
           <p>{sunny}</p>
+          <p>21/5</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(1)}</p>
           <p>{getDate(1)}</p>
           <p>{sunny}</p>
+          <p>25/3</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(2)}</p>
           <p>{getDate(2)}</p>
           <p>{sunny}</p>
+          <p>26/10</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(3)}</p>
           <p>{getDate(3)}</p>
           <p>{sunny}</p>
+          <p>25/8</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(4)}</p>
           <p>{getDate(4)}</p>
           <p>{sunny}</p>
+          <p>27/6</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(5)}</p>
           <p>{getDate(5)}</p>
           <p>{sunny}</p>
+          <p>22/2</p>
         </div>
         <div className="climaIcon">
           {""}
           <p>{getDayWeek(6)}</p>
           <p>{getDate(6)}</p>
           <p>{sunny}</p>
+          <p>29/11</p>
         </div>
       </div>
       <div className="clima-chart">
@@ -536,9 +554,15 @@ function App() {
           <p>{valores[2]} º</p>
         </div>
       </div>
-      <div>
-        La ultima respuesta del servidor fue a las:{" " + valores[0]}
-      </div>
+      <div>La ultima respuesta del servidor fue a las:{" " + valores[0]}</div>
+      <Link to="Data">Data</Link>
+      <Link to="/">Data</Link>
+      <Routes>
+      <Route path="Data" element={<Data />} />
+      <Route path="/" element={<App />} />
+      
+
+      </Routes>
     </div>
   );
 }
