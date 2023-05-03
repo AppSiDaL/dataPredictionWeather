@@ -210,21 +210,22 @@ function App() {
   const [valores, setvalores] = useState([]);
   const [temperaturas, setTemperaturas] = useState([]);
   const [lluvias, setlluvias] = useState([]);
+  const [minTemperatura, setminTemperatura] = useState([]);
+  const [maxTemperatura, setmaxTemperatura] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost/weatherStation/obtain.php")
+      .get("http://localhost/weather/obtain.php")
       .then(function (response) {
         const datos = [];
         const nombres = [
           "time",
-          "type",
-          "direction",
-          "humidity",
-          "rain",
-          "ligth",
-          "pressure",
-          "tempeture",
-          "speed",
+          "direccion",
+          "humedad",
+          "lluvia",
+          "luz",
+          "presion",
+          "temperatura",
+          "velocidad",
           "probabilidad",
         ];
         for (let i = 0; i <= nombres.length; i++) {
@@ -240,10 +241,10 @@ function App() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://localhost/weatherStation/getNextLluvias.php")
+      .get("http://localhost/weather/getNextLluvias.php")
       .then(function (response) {
         const nuevasLluvias = [];
-        for (let i = 1; i <= 23; i++) {
+        for (let i = 1; i < 25; i++) {
           const lluvia = response.data[i - 1].probabilidad;
           nuevasLluvias.push(lluvia);
         }
@@ -256,14 +257,28 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost/weatherStation/getNextHours.php")
+      .get("http://localhost/weather/getNextHours.php")
       .then(function (response) {
         const nuevasTemperaturas = [];
-        for (let i = 1; i <= 23; i++) {
-          const temperatura = response.data[i - 1].tempeture;
+        for (let i = 1; i < 25; i++) {
+          const temperatura = response.data[i - 1].temperatura;
           nuevasTemperaturas.push(temperatura);
         }
         setTemperaturas(nuevasTemperaturas);
+        console.log(temperaturas);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost/weather/getNextDaysMin.php")
+      .then(function (response) {
+        const nuevasTemperaturas = [];
+
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
