@@ -12,7 +12,7 @@ function tick() {
   root.render(
     <React.StrictMode>
       <BrowserRouter>
-      <Data/>
+      <App/>
       </BrowserRouter>
     </React.StrictMode>
   );
