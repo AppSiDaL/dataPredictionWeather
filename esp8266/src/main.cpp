@@ -1,7 +1,8 @@
 #include <SoftwareSerial.h>
-#include <ThingerESP32.h>
-#include <WiFi.h>
-#include <HTTPClient.h>
+#include <ThingerESP8266.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <WiFiClient.h>
 
 // Crear variables para Software en serie Rx=D6/GPIO12, Tx=D7/GPIO13
 SoftwareSerial DataSerial(12, 13);
@@ -22,7 +23,7 @@ String arrData[7];
 #define LED_PIN 4 // PIN D2=GPIO4
 
 // Variable para ThingerIO
-ThingerESP32 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
+ThingerESP8266 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
 
 // Configuración de WiFi
 //const char *ssid = "HONOR 20";
@@ -30,9 +31,6 @@ ThingerESP32 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
 const char *ssid = "SULY";
 const char *password = "albin1517";
 String serverName = "http://tesjo-appsidal.000webhostapp.com/weather/save.php";
-const char *host = "https://tesjo-appsidal.000webhostapp.com/weather/";
-float tempeture;
-float humidity;
 
 // Proporcionar una variable para contener los valores para enviarlos a Thinger IO
 int TEMPERATURA;
@@ -94,6 +92,8 @@ void loop()
     // Eliminar espacios
     data.trim();
 
+    Serial.print(data);
+
     // Datos de prueba
     if (data != "")
     {
@@ -131,8 +131,6 @@ void loop()
       DIRECCION = arrData[5].toInt();
       LLUVIA = arrData[6].toInt();
 
-      Serial.print(TEMPERATURA);
-
       // Activar el envio de datos a ThingerIO
       thing.handle();
 
@@ -149,16 +147,17 @@ void loop()
     DataSerial.println("A");
   }
 
-  // Usamos la direccion ip mas el puerto, en mi caso es el 8080, pero normalmente es el 80
+  // Check WiFi connection status
   if (WiFi.status() == WL_CONNECTED)
   {
+    WiFiClient client;
     HTTPClient http;
 
     String serverPath = serverName + "?TEMPERATURA="+TEMPERATURA+"&HUMEDAD="+HUMEDAD+"&PRESION="+PRESION
     +"&LUZ="+LUZ+"&VELOCIDAD="+VELOCIDAD+"&DIRECCION="+DIRECCION+"&LLUVIA="+LLUVIA;
 
     // Your Domain name with URL path or IP address with path
-    http.begin(serverPath.c_str());
+    http.begin(client, serverPath.c_str());
 
     // If you need Node-RED/server authentication, insert user and password below
     // http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");
@@ -185,6 +184,7 @@ void loop()
   {
     Serial.println("WiFi Disconnected");
   }
+
   delay(5000);
   Serial.println(arrData[23]);
   delay(1000);

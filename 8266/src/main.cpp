@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
-#include <ThingerESP32.h>
-#include <WiFi.h>
+#include <ThingerESP8266.h>
+#include <ESP8266WiFi.h>
 #include <HTTPClient.h>
 
 // Crear variables para Software en serie Rx=D6/GPIO12, Tx=D7/GPIO13
@@ -22,7 +22,7 @@ String arrData[7];
 #define LED_PIN 4 // PIN D2=GPIO4
 
 // Variable para ThingerIO
-ThingerESP32 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
+ThingerESP8266 thing(USERNAME, DEVICE_ID, DEVICE_CREDENTIAL);
 
 // Configuración de WiFi
 //const char *ssid = "HONOR 20";
@@ -152,7 +152,7 @@ void loop()
   // Usamos la direccion ip mas el puerto, en mi caso es el 8080, pero normalmente es el 80
   if (WiFi.status() == WL_CONNECTED)
   {
-    HTTPClient http;
+    HttpClient http;
 
     String serverPath = serverName + "?TEMPERATURA="+TEMPERATURA+"&HUMEDAD="+HUMEDAD+"&PRESION="+PRESION
     +"&LUZ="+LUZ+"&VELOCIDAD="+VELOCIDAD+"&DIRECCION="+DIRECCION+"&LLUVIA="+LLUVIA;
