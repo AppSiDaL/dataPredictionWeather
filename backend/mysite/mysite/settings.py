@@ -26,8 +26,10 @@ SECRET_KEY = 'django-insecure-i3-u3*=bkvrlm9fk@q+^s_j3+ktp%bf1=od0^+=*gn3zm71d7i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = [
+    'tesjo-clima-api.onrender.com',
+    # Otros valores permitidos de host
+]
 
 # Application definition
 
