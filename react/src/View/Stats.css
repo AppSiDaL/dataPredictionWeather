@@ -1,7 +1,7 @@
 .header {
   justify-content: center;
   height: 100px;
-  background-color:#6c7ca4;
+  background-color: #4e658d;
   display: flex;
   font-family: Arial, sans-serif;
   color: white;
@@ -10,51 +10,57 @@
 
 .top {
   height: 50px;
-  background-color: #a1aad8;
+  background-color: #5f93ab;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.topTitle{
+.topTitle {
   align-items: center;
   text-align: center;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: medium;
 }
-.highlight{
-background-color: aqua;
+.highlight {
+  font-size: 18px;
+  background-color: azure;
+  color: #34307e;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .navbar {
   display: flex;
   height: 20px;
-  background-color: #374484;
+  background-color: #4e658d;
   flex-direction: row;
   margin: 0;
 }
-.timeRange{
+.timeRange {
   margin: auto;
   color: white;
 }
-.cards{
+
+.cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-content: flex-start; /* Agregado */
 }
-.card{
-  display:flex;
-  background-size:cover;
-  flex-direction:column;
-  justify-content:space-between;
-  width:90%;
+
+.card {
+  display: flex;
+  background-size: cover;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80%;
   margin: 5px;
-  border: 1px solid lightgray;
-  box-shadow: 2px 2px 8px 4px #d3d3d3d1;
-  border-radius:15px;
+  border-radius: 15px;
   font-family: sans-serif;
 }
 .cardHeader {
-  background-color: rgba(0, 0, 0, 0.2); 
-  color: #ffffff; 
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
   font-size: 24px;
   text-align: center;
 }
@@ -65,103 +71,119 @@ background-color: aqua;
   padding: 10px;
 }
 
-.cardBody > div {
-  flex-grow: 1;
-}
-
 .cardBody .icon {
   align-self: center;
   margin-left: auto;
 }
 
-
-.cardBody h1{
+.cardBody h1 {
   font-size: 70px;
 }
 
-.cardBody p{
+.cardBody p {
   font-size: 30px;
 }
 
-.card2{
-  display:flex;
+.card2 {
+  padding: 20px;
+  display: flex;
   background-color: white;
   background-size: cover;
   background-position-x: center;
-  flex-direction:column;
-  justify-content:space-between;
-  width:500px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 500px;
+  height: min-content;
   margin: 5px;
-  border: 1px solid lightgray;
-  box-shadow: 2px 2px 8px 4px #d3d3d3d1;
-  border-radius:15px;
+  border-radius: 15px;
   font-family: sans-serif;
 }
-.cardHeader2{
+.cardHeader2 {
   font-size: 24px;
+  margin-bottom: -40px;
   padding: 10px;
 }
 
-.cardBody2{
+.cardBody2 {
   display: flex;
   height: auto;
   justify-content: center;
   padding: 10px;
 }
-.cardData{
+.cardData {
   margin: 2%;
-  border-right-style:solid;
-  border-right-color: black;
+  border-right: 1px solid;
+  border-image: linear-gradient(to top, #0000, #000, #0000);
+  border-image-slice: 1;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
-.card3{
-  display:flex;
+.card3 {
+  display: flex;
   background-color: white;
   background-size: cover;
   background-position-x: center;
-  flex-direction:column;
-  justify-content:space-between;
-  width:500px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 500px;
+  height: min-content;
   margin: 5px;
-  border: 1px solid lightgray;
-  box-shadow: 2px 2px 8px 4px #d3d3d3d1;
-  border-radius:15px;
+  border-radius: 15px;
   font-family: sans-serif;
 }
-.cardHeader3{
+.cardHeader3 {
   font-size: 24px;
+  margin-bottom: -40px;
   padding: 10px;
 }
 
-.cardBody3{
+.cardBody3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+  grid-gap: 10px; /* Espacio entre los elementos */
   height: auto;
   padding: 10px;
 }
 
-.card4{
-  display:flex;
+.details {
+  border-bottom: 1px solid;
+  border-image: linear-gradient(to right, #0000, #000, #0000);
+  border-image-slice: 1;
+}
+
+.card4 {
+  display: flex;
   background-color: white;
   background-size: cover;
   background-position-x: center;
-  flex-direction:column;
-  justify-content:space-between;
-  width:500px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: min-content;
   margin: 5px;
-  border: 1px solid lightgray;
-  box-shadow: 2px 2px 8px 4px #d3d3d3d1;
-  border-radius:15px;
+  height: min-content;
+  border-radius: 15px;
   font-family: sans-serif;
 }
-.cardHeader4{
+.cardHeader4 {
   font-size: 24px;
+  margin-bottom: -40px;
   padding: 10px;
 }
 
-.cardBody4{
+.cardBody4 {
+  align-self: center;
+  margin: 10px;
   display: flex;
   height: auto;
   padding: 10px;
+}
+
+.cardDetails4 {
+  margin: 10px;
+
+  border-right: 1px solid;
+  border-image: linear-gradient(to top, #0000, #000, #0000);
+  border-image-slice: 1;
 }

@@ -1,10 +1,18 @@
 import requests
 import datetime
+import psycopg2
 import mysql.connector
 
 def conectar_bd():
-    cnx = mysql.connector.connect(user='root', password='',
-                                  host='localhost', database='clima')
+
+    cnx = psycopg2.connect(
+        host='dpg-ci0cmc33cv232ebgjoog-a.oregon-postgres.render.com',
+        port='5432' ,
+        database='clima',
+        user='root',
+        password='8sWnIWKoQ8aO8ll8hQNLqOc5MisP5VIO' 
+    )
+
     return cnx
 
 
@@ -15,6 +23,7 @@ headers = {
 data='grant_type=password&username=Rubes&password=Meca.TESJo01'
 response = requests.post(url, headers=headers,data=data)
 respuesta=response.json()
+
 token=respuesta['access_token']
 url = 'https://eu-central.aws.thinger.io:443/v1/users/Rubes/buckets/Variables_Meteorologicas/data'
 headers = {
@@ -31,17 +40,17 @@ if response.status_code == 200:
     cursor = conexion.cursor()
 
     for item in data:
-        timestamp = item['ts'] / 1000  # Convertir de milisegundos a segundos
+        timestamp = item['ts'] / 1000 
         fecha_hora = datetime.datetime.fromtimestamp(timestamp)
         formato = "%Y-%m-%d %H:%M:%S"
         fecha_hora_formateada = fecha_hora.strftime(formato)
         item['ts'] = fecha_hora_formateada
         timestamp = item['ts']
 
-        # Separar la cadena en fecha y hora
         fecha, hora = timestamp.split()
+        fechas=fecha.split('-')
+        fecha=fechas[0]+"-"+fechas[1]+"-"+fechas[2]
 
-        # Separar la hora en hora, minuto y segundo
         hora, minuto, segundo = hora.split(':')
 
         validation_query= "SELECT * FROM tesjo where fecha=%s and hora=%s and minuto=%s"
@@ -54,12 +63,11 @@ if response.status_code == 200:
                                         item['val']['LLUVIA'],item['val']['LUZ'],item['val']['PRESION'],
                                         item['val']['TEMPERATURA'],item['val']['VELOCIDAD']))
             print("Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
-             # Confirmar los cambios en la base de datos
+
             conexion.commit()
 
-    # Cerrar cursor y conexión
     cursor.close()
     conexion.close()
-    # Manejar los datos de respuesta según sea necesario
+
 else:
     print('Error al obtener los datos:', response.text)
