@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 import psycopg2
 from datetime import datetime, timedelta
-import zoneinfo
+from backports import zoneinfo
 zona = zoneinfo.ZoneInfo("America/Mexico_City")
 def conectar_bd():
     cnx = psycopg2.connect(
