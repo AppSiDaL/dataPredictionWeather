@@ -2,8 +2,8 @@ from django.http import HttpResponse, JsonResponse
 import psycopg2
 import requests
 from datetime import datetime, timedelta
-from backports import zoneinfo
-zona = zoneinfo.ZoneInfo("America/Mexico_City")
+import pytz
+zona = pytz.timezone("America/Mexico_City")
 def conectar_bd():
     cnx = psycopg2.connect(
         host="dpg-ci0cmc33cv232ebgjoog-a.oregon-postgres.render.com",
