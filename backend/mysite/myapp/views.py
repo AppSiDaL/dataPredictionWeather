@@ -180,11 +180,11 @@ def bridge(request):
     else:
         print('Error al obtener los datos:', response.text)
     
-    impresion["Access-Control-Allow-Origin"] = "*"
-    impresion["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    impresion["Access-Control-Allow-Headers"] = "Content-Type"
+    response = HttpResponse(impresion)
+
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
 
     # Devolver la respuesta
-    return HttpResponse(impresion)
-
-
+    return response
