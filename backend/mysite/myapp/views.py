@@ -66,7 +66,14 @@ def currentValues(request):
     valores["maxTemperatura"] = datos3[0][0]
     valores["avgTemperatura"] = round(datos4[0][0])
 
-    return JsonResponse(valores)
+    response = JsonResponse(valores)
+
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Devolver la respuesta
+    return response
 
 
 def next48Values(response):
