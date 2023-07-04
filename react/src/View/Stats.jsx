@@ -63,6 +63,7 @@ export default function Stats() {
     axios
       .get("https://tesjo-clima-api.onrender.com/api/currentValues")
       .then(function (response) {
+        console.log(response.data)
         const datos = [];
         const nombres = [
           "fecha",
