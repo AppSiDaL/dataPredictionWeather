@@ -1,14 +1,19 @@
 import mysql.connector
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-
+import psycopg2
 import calendar
 
 
 
 def conectar_bd():
-    cnx = mysql.connector.connect(user='root', password='',
-                                  host='localhost', database='clima')
+    cnx = psycopg2.connect(
+        host="dpg-ci0cmc33cv232ebgjoog-a.oregon-postgres.render.com",
+        port="5432",
+        database="clima",
+        user="root",
+        password="8sWnIWKoQ8aO8ll8hQNLqOc5MisP5VIO",
+    )
     return cnx
 
 
@@ -16,7 +21,7 @@ def obtener_datos_fecha():
     conexion = conectar_bd()
     cursor = conexion.cursor()
 
-    consulta2="SELECT fecha,hora,minuto FROM tesjo ORDER BY fecha desc LIMIT 1"
+    consulta2="SELECT fecha,hora,minuto FROM tesjo WHERE CONCAT(fecha, ' ', TO_CHAR(hora, 'FM00'), ':', TO_CHAR(minuto, 'FM00')) = (SELECT MAX(CONCAT(fecha, ' ', TO_CHAR(hora, 'FM00'), ':', TO_CHAR(minuto, 'FM00'))) FROM tesjo);"
     cursor.execute(consulta2)
 
     datosFecha=cursor.fetchall()
@@ -66,10 +71,11 @@ def validarFecha(minuto, hora, dia, mes, anio):
     conexion = conectar_bd()
     cursor = conexion.cursor()
     fecha=str(anio)+"-"+str(mes).zfill(2)+"-"+str(dia)
-    consulta = "SELECT * from tabla_predicciones where fecha=%s and hora=%s and minuto=%s"
-    cursor.execute(consulta,(fecha,hora,minuto))
+    consulta = "SELECT * from tabla_predicciones where fecha=%s and hora=%s and minuto=%s LIMIT 1"
+    cursor.execute(consulta,(fecha,str(hora),str(minuto)))
 
     datos = cursor.fetchall()
+    print (datos)
     cursor.close()
     conexion.close()
 
@@ -86,6 +92,7 @@ def insertar_predicciones(predicciones,datos_fecha):
     dia=fecha.day
     mes=fecha.month
     anio=fecha.year
+    print (len(predicciones))
     for prediccion in predicciones:
         minuto = minuto + 1
         if minuto == 60:

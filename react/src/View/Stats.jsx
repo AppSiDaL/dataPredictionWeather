@@ -63,7 +63,6 @@ export default function Stats() {
     axios
       .get("https://tesjo-clima-api.onrender.com/api/currentValues")
       .then(function (response) {
-        console.log(response.data)
         const datos = [];
         const nombres = [
           "fecha",
@@ -96,7 +95,7 @@ export default function Stats() {
   const [next48values, setNext48values] = useState({});
   useEffect(() => {
     axios
-      .get("http://172.26.64.173/clima/getNextValues48.php")
+      .get("https://tesjo-clima-api.onrender.com/api/next48Values")
       .then(function (response) {
         setNext48values(response.data);
       })

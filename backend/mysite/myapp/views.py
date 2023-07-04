@@ -111,10 +111,16 @@ def next48Values(response):
         average=round(average)
         data["average"+str(i+1)]=average
         data["fecha"+str(i+1)]=now.strftime('%Y-%m-%d')
-        data["hora"+str(i+1)]=horaActual
+        data["hora"+str(i+1)]=hora
 
+    response = JsonResponse(data)
 
-    return JsonResponse(data)
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Devolver la respuesta
+    return response
 
 def apiBridge(request):
     fecha = request.GET.get('fecha')
