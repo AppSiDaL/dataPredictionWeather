@@ -152,12 +152,12 @@ def bridge(request):
         data = response.json()
         conexion = conectar_bd()
         cursor = conexion.cursor()
-    
         for item in data:
             timestamp = item['ts'] / 1000 
             fecha_hora = datetime.fromtimestamp(timestamp)
+            fecha_hora_ajustada = fecha_hora.astimezone(zona)
             formato = "%Y-%m-%d %H:%M:%S"
-            fecha_hora_formateada = fecha_hora.strftime(formato)
+            fecha_hora_formateada = fecha_hora_ajustada.strftime(formato)
             item['ts'] = fecha_hora_formateada
             timestamp = item['ts']
 
