@@ -169,7 +169,7 @@ def bridge(request):
                 cursor.execute(insert_query, (fecha,hora,minuto,item['val']['DIRECCION'],item['val']['HUMEDAD'],
                                             item['val']['LLUVIA'],item['val']['LUZ'],item['val']['PRESION'],
                                             item['val']['TEMPERATURA'],item['val']['VELOCIDAD']))
-                impresion+=("\nSe inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
+                impresion+=("<br>Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
                 print("Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
 
                 conexion.commit()
@@ -180,6 +180,11 @@ def bridge(request):
     else:
         print('Error al obtener los datos:', response.text)
     
+    impresion["Access-Control-Allow-Origin"] = "*"
+    impresion["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    impresion["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Devolver la respuesta
     return HttpResponse(impresion)
 
 
