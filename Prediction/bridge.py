@@ -1,8 +1,6 @@
 import requests
 import datetime
 
-
-
 url ='https://eu-central.aws.thinger.io:443/oauth/token'
 headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -37,7 +35,7 @@ if response.status_code == 200:
 
         hora, minuto, segundo = hora.split(':')
 
-        url = 'https://mi-api.com/endpoint'
+        url = 'https://tesjo-clima-api.onrender.com/api/apiBridge'
         payload = {'fecha': fecha, 'hora': hora,'minuto':minuto,'direccion':item['val']['DIRECCION'],'humedad':item['val']['HUMEDAD'],
                                         'lluvia':item['val']['LLUVIA'],'luz':item['val']['LUZ'],'presion':item['val']['PRESION'],
                                         'temperatura':item['val']['TEMPERATURA'],'velocidad':item['val']['VELOCIDAD']}
@@ -45,7 +43,7 @@ if response.status_code == 200:
         response = requests.get(url, params=payload)
 
         if response.status_code == 200:
-            data = response.json()
+            data = "ingresado correctamente"
             print(data)
         else:
             print('Error:', response.status_code)

@@ -20,6 +20,7 @@ from myapp import views
 urlpatterns = [
     path('api/', views.my_view, name='my_view'),
     path('api/apiBridge',views.apiBridge, name='apiBridge'),
+    path('api/bridge',views.bridge,name='bridge'),
     path('api/currentValues',views.currentValues, name="currentValues"),
     path('api/next48Values',views.next48Values,name="next48Values")
 ]

@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 import psycopg2
+import requests
 from datetime import datetime, timedelta
 from backports import zoneinfo
 zona = zoneinfo.ZoneInfo("America/Mexico_City")
@@ -109,6 +110,76 @@ def next48Values(response):
     return JsonResponse(data)
 
 def apiBridge(request):
-    param1 = request.GET.get('param1')
-    param2 = request.GET.get('param2')
-    return HttpResponse('Param1: {}, Param2: {}'.format(param1, param2))
+    fecha = request.GET.get('fecha')
+    hora = request.GET.get('hora')
+    minuto = request.GET.get('minuto')
+    direccion = request.GET.get('direccion')
+    humedad = request.GET.get('humedad')
+    lluvia = request.GET.get('lluvia')
+    luz = request.GET.get('luz')
+    presion = request.GET.get('presion')
+    temperatura = request.GET.get('temperatura')
+    velocidad = request.GET.get('velocidad')
+    return HttpResponse('Param1: {}, Param2: {}'.format(fecha, hora))
+
+def bridge(request):
+    url ='https://eu-central.aws.thinger.io:443/oauth/token'
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+    data='grant_type=password&username=Rubes&password=Meca.TESJo01'
+    response = requests.post(url, headers=headers,data=data)
+    respuesta=response.json()
+
+    token=respuesta['access_token']
+    url = 'https://eu-central.aws.thinger.io:443/v1/users/Rubes/buckets/Variables_Meteorologicas/data'
+    headers = {
+        'accept': 'application/json',
+        'Authorization': 'Bearer '+token
+    }
+
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        conexion = conectar_bd()
+        cursor = conexion.cursor()
+
+        for item in data:
+            timestamp = item['ts'] / 1000 
+            fecha_hora = datetime.datetime.fromtimestamp(timestamp)
+            formato = "%Y-%m-%d %H:%M:%S"
+            fecha_hora_formateada = fecha_hora.strftime(formato)
+            item['ts'] = fecha_hora_formateada
+            timestamp = item['ts']
+
+            fecha, hora = timestamp.split()
+            fechas=fecha.split('-')
+            fecha=fechas[0]+"-"+fechas[1]+"-"+fechas[2]
+
+            hora, minuto, segundo = hora.split(':')
+
+            validation_query= "SELECT * FROM tesjo where fecha=%s and hora=%s and minuto=%s"
+            cursor.execute(validation_query,(fecha,hora,minuto))
+            datos = cursor.fetchall()
+
+            if len(datos)==0:
+                insert_query = "INSERT INTO tesjo VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(insert_query, (fecha,hora,minuto,item['val']['DIRECCION'],item['val']['HUMEDAD'],
+                                            item['val']['LLUVIA'],item['val']['LUZ'],item['val']['PRESION'],
+                                            item['val']['TEMPERATURA'],item['val']['VELOCIDAD']))
+                impresion=+("\nSe inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
+                print("Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
+
+                conexion.commit()
+
+        cursor.close()
+        conexion.close()
+
+    else:
+        print('Error al obtener los datos:', response.text)
+    
+    return HttpResponse(impresion)
+
+
