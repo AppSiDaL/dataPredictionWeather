@@ -148,7 +148,7 @@ def bridge(request):
 
         for item in data:
             timestamp = item['ts'] / 1000 
-            fecha_hora = datetime.datetime.fromtimestamp(timestamp)
+            fecha_hora = datetime.fromtimestamp(timestamp)
             formato = "%Y-%m-%d %H:%M:%S"
             fecha_hora_formateada = fecha_hora.strftime(formato)
             item['ts'] = fecha_hora_formateada
