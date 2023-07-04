@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'tesjo-clima-api.onrender.com',
-    # Otros valores permitidos de host
+    'localhost'
 ]
 
 # Application definition

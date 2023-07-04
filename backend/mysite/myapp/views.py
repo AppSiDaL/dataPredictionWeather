@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 import psycopg2
 from datetime import datetime, timedelta
 from backports import zoneinfo
@@ -15,20 +15,12 @@ def conectar_bd():
 
 
 def my_view(request):
-    # Procesa la solicitud GET
-    # Puedes acceder a los parámetros de la solicitud utilizando request.GET
-
-    # Ejemplo de respuesta JSON
-    response_data = {
-        "message": "¡Hola desde Django!",
-        "params": dict(request.GET),
-    }
-
-    return JsonResponse(response_data)
+    return HttpResponse("Esta es la API para obtener datos climatologicos del TESJo <br> Developed by AppSiDaL")
 
 
 def currentValues(request):
     conexion = conectar_bd()
+    now = datetime.now(zona)
     cursor = conexion.cursor()
     consulta = (
         "SELECT *"
@@ -48,25 +40,25 @@ def currentValues(request):
     consulta = (
         "SELECT MIN(temperatura) minTemperatura"
         " FROM tesjo "
-        "WHERE fecha = CURRENT_DATE"
+        "WHERE fecha = %s"
     )
-    cursor.execute(consulta)
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),))
     datos2 = cursor.fetchall()
 
     consulta = (
         "SELECT MAX(temperatura) maxTemperatura"
         " FROM tesjo "
-        "WHERE fecha = CURRENT_DATE"
+        "WHERE fecha = %s"
     )
-    cursor.execute(consulta)
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),))
     datos3 = cursor.fetchall()
 
     consulta = (
         "SELECT AVG(temperatura) avgTemperatura"
         " FROM tesjo "
-        "WHERE fecha = CURRENT_DATE"
+        "WHERE fecha = %s"
     )
-    cursor.execute(consulta)
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),))
     datos4 = cursor.fetchall()
     print(datos2)
     valores["minTemperatura"] = datos2[0][0]
@@ -116,4 +108,7 @@ def next48Values(response):
 
     return JsonResponse(data)
 
-
+def apiBridge(request):
+    param1 = request.GET.get('param1')
+    param2 = request.GET.get('param2')
+    return HttpResponse('Param1: {}, Param2: {}'.format(param1, param2))
