@@ -82,7 +82,7 @@ export default function Stats() {
         ];
         for (let i = 0; i <= nombres.length - 1; i++) {
           const indice = nombres[i];
-          const data = response.data[0][indice];
+          const data = response.data[indice];
           datos[indice] = data;
         }
         setCurrentValues(datos);
