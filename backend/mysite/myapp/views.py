@@ -140,12 +140,12 @@ def bridge(request):
 
 
     response = requests.get(url, headers=headers)
-
+    impresion=''
     if response.status_code == 200:
         data = response.json()
         conexion = conectar_bd()
         cursor = conexion.cursor()
-
+    
         for item in data:
             timestamp = item['ts'] / 1000 
             fecha_hora = datetime.fromtimestamp(timestamp)
@@ -169,7 +169,7 @@ def bridge(request):
                 cursor.execute(insert_query, (fecha,hora,minuto,item['val']['DIRECCION'],item['val']['HUMEDAD'],
                                             item['val']['LLUVIA'],item['val']['LUZ'],item['val']['PRESION'],
                                             item['val']['TEMPERATURA'],item['val']['VELOCIDAD']))
-                impresion=+("\nSe inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
+                impresion+=("\nSe inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
                 print("Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
 
                 conexion.commit()
