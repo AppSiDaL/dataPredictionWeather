@@ -180,6 +180,8 @@ def bridge(request):
                 print("Se inserto un nuevo registro con el tiempo: "+fecha+" "+hora+":"+minuto)
 
                 conexion.commit()
+            else:
+                impresion+=("<br>No se inserto nada")
 
         cursor.close()
         conexion.close()

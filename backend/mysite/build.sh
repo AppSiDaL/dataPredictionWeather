@@ -6,5 +6,6 @@ pip3 install psycopg2
 pip3 install backports.zoneinfo
 pip3 install gunicorn
 pip3 install requests
+pip3 install pytz
 python manage.py collectstatic --no-input
 python manage.py migrate
