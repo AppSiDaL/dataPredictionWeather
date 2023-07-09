@@ -106,7 +106,7 @@ def next48Values(response):
             valores = dict(zip(columnas, primera_fila))
 
         for valor in valores:
-            average=average+valores["prediccion"]
+            average=average+valores["temperatura"]
         average=average/len(valores)
         average=round(average)
         data["average"+str(i+1)]=average

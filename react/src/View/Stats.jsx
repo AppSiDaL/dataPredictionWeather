@@ -1,6 +1,5 @@
 import "./Stats.css";
 import React, { useState, useEffect } from "react";
-import tesjoLogo from "./assets/tesjoLogo.png";
 import Navbar from "./Navbar";
 
 import sunriseImage from "./assets/sunrise.jpg";
@@ -148,12 +147,6 @@ export default function Stats() {
 
   return (
     <>
-      <div
-        /*style={{ backgroundColor: `${backgroundColor}` }}*/ className="header"
-      >
-        <img src={tesjoLogo} />
-        <h1>TESJO CLIMA</h1>
-      </div>
       <Navbar />
       <div className="cards">
         <div

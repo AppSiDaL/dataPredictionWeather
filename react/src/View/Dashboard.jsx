@@ -185,11 +185,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost/weather/obtain.php")
+      .get("https://tesjo-clima-api.onrender.com/api/currentValues")
       .then(function (response) {
         const datos = [];
         const nombres = [
-          "time",
+          "fecha",
+          "hora",
+          "minuto",
           "direccion",
           "humedad",
           "lluvia",
@@ -197,12 +199,15 @@ export default function Dashboard() {
           "presion",
           "temperatura",
           "velocidad",
-          "probabilidad",
+          "minTemperatura",
+          "maxTemperatura",
+          "avgTemperatura",
+          "estadoClima",
         ];
-        for (let i = 0; i <= nombres.length; i++) {
-          var indice = nombres[i];
-          const data = response.data[0][indice];
-          datos.push(data);
+        for (let i = 0; i <= nombres.length - 1; i++) {
+          const indice = nombres[i];
+          const data = response.data[indice];
+          datos[indice] = data;
         }
         setvalores(datos);
       })
@@ -228,15 +233,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost/weather/getNextHours.php")
+      .get("https://tesjo-clima-api.onrender.com/api/next48Values")
       .then(function (response) {
         const nuevasTemperaturas = [];
         for (let i = 1; i < 25; i++) {
-          const temperatura = response.data[i - 1].temperatura;
+          const temperatura = response.data["average"+i];
           nuevasTemperaturas.push(temperatura);
         }
         setTemperaturas(nuevasTemperaturas);
-        console.log(temperaturas);
       })
       .catch((error) => {
         console.error(error);
@@ -279,7 +283,7 @@ export default function Dashboard() {
       <div className={hora}>
         <h3 className="city">TESJo</h3>
         <p>{now}</p>
-        <p className="temperatura">{valores[7] + "º"}</p>
+        <p className="temperatura">{valores["temperatura"] + "º"}</p>
         <p className="clima">{tiempo}</p>
         <div className="grid-container">
           <div>
@@ -484,40 +488,40 @@ export default function Dashboard() {
           <div>
             <p>Humedad</p>
             {water}
-            <p>{valores[3]} %</p>
+            <p>{valores["humedad"]} %</p>
           </div>
           <div>
             {" "}
             <p>Lluvia</p>
             {droplet}
-            <p>{valores[4]} cm3</p>
+            <p>{valores["lluvia"]} cm3</p>
           </div>
           <div className="elementos">
             {" "}
             <p>Luz</p>
             {lightBulb}
-            <p>{valores[5]} Lx</p>
+            <p>{valores["luz"]} Lx</p>
           </div>
           <div className="elementos">
             {" "}
             <p>Presion</p>
             {scale}
-            <p>{valores[6]} var</p>
+            <p>{valores["presion"]} var</p>
           </div>
           <div className="elementos">
             {" "}
             <p>Velocidad Viento</p>
             {wind}
-            <p>{valores[8]} km/h</p>
+            <p>{valores["velocidad"]} km/h</p>
           </div>
           <div className="elementos">
             {" "}
             <p>Direccion</p>
             {compass}
-            <p>{valores[2]} º</p>
+            <p>{valores["direccion"]} º</p>
           </div>
         </div>
-        <div>La ultima respuesta del servidor fue a las:{" " + valores[0]}</div>
+        <div>La ultima respuesta del servidor fue a las:{" " + valores["hora"]}</div>
       </div>
     </>
   );
