@@ -1,19 +1,8 @@
 import "./Stats.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 export default function Navbar() {
   const fechaActual = new Date();
-  const updateBridge=()=>{
-      axios
-        .get("https://tesjo-clima-api.onrender.com/api/bridge")
-        .then(function (response) {
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  }
   return (
     <>
       <div className="top">
@@ -26,7 +15,7 @@ export default function Navbar() {
         <Link className="timeRange" to="/">
           Landing
         </Link>
-        <Link className="timeRange" to="/now" onClick={updateBridge}>
+        <Link className="timeRange" to="/now" >
           Ahora
         </Link>
         <Link className="timeRange" to="/horas">

@@ -103,6 +103,18 @@ export default function Stats() {
       });
   }, [next48values]);
 
+  const [todayValues, setTodayValues] = useState({});
+  useEffect(() => {
+    axios
+      .get("https://tesjo-clima-api.onrender.com/api/todayValues")
+      .then(function (response) {
+        setNext48values(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [next48values]);
+
   var abreviatura = "am";
   if (currentValues["hora"] > 12) {
     abreviatura = "pm";

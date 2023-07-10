@@ -3,6 +3,7 @@ import psycopg2
 import requests
 from datetime import datetime, timedelta
 import pytz
+import json
 zona = pytz.timezone("America/Mexico_City")
 def conectar_bd():
     cnx = psycopg2.connect(
@@ -196,6 +197,104 @@ def bridge(request):
         print('Error al obtener los datos:', response.text)
     
     response = HttpResponse(impresion)
+
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Devolver la respuesta
+    return response
+
+def todayValues(request):
+    conexion = conectar_bd()
+    now = datetime.now(zona)
+    hora=now.hour
+    cursor = conexion.cursor()
+    consulta = (
+        "SELECT *"
+        "FROM tesjo "
+        "WHERE CONCAT(fecha, ' ', TO_CHAR(hora, 'FM00'), ':', TO_CHAR(minuto, 'FM00')) = ("
+        "SELECT MAX(CONCAT(fecha, ' ', TO_CHAR(hora, 'FM00'), ':', TO_CHAR(minuto, 'FM00')))"
+        " FROM tesjo"
+        ");"
+    )
+    cursor.execute(consulta)
+    lastResponse = cursor.fetchall()
+    if lastResponse:
+        columnas = [column[0] for column in cursor.description]
+        primera_fila = lastResponse[0]
+        valores = dict(zip(columnas, primera_fila))
+
+    tabla="tesjo"
+    horaMañana=9
+    horaMedio=12
+    horaTarde=16
+    horaNoche=20
+    print(valores["hora"])
+    if valores["hora"] < horaMañana:
+        tabla="tabla_predicciones"
+    print(tabla)        
+    consulta = (
+            "SELECT * FROM "+tabla+" where fecha = %s and hora = %s limit 1"
+        )
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),horaMañana))
+    values = cursor.fetchall()
+    mañanaValues={}
+    if values:
+        columnas = [column[0] for column in cursor.description]
+        primera_fila = values[0]
+        mañanaValues = dict(zip(columnas, primera_fila))
+    mañanaValues["fecha"]=now.strftime('%Y-%m-%d')
+#obtener los valores para la hora de medio dia
+    if valores["hora"] < horaMedio:
+        tabla="tabla_predicciones"
+    print(tabla)        
+    consulta = (
+            "SELECT * FROM "+tabla+" where fecha = %s and hora = %s limit 1"
+        )
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),horaMedio))
+    values = cursor.fetchall()
+    print(cursor.mogrify(consulta,(now.strftime('%Y-%m-%d'),horaMedio)))
+    medioValues={}
+    if values:
+        columnas = [column[0] for column in cursor.description]
+        primera_fila = values[0]
+        medioValues = dict(zip(columnas, primera_fila))
+    medioValues["fecha"]=now.strftime('%Y-%m-%d')
+#obtener los valores para la tarde
+    if valores["hora"] < horaTarde:
+        tabla="tabla_predicciones"
+    print(tabla)        
+    consulta = (
+            "SELECT * FROM "+tabla+" where fecha = %s and hora = %s limit 1"
+        )
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),horaTarde))
+    values = cursor.fetchall()
+    print(cursor.mogrify(consulta,(now.strftime('%Y-%m-%d'),horaTarde)))
+    tardeValues={}
+    if values:
+        columnas = [column[0] for column in cursor.description]
+        primera_fila = values[0]
+        tardeValues = dict(zip(columnas, primera_fila))
+    tardeValues["fecha"]=now.strftime('%Y-%m-%d')
+#obtener los valores para la noche
+    if valores["hora"] < horaNoche:
+        tabla="tabla_predicciones"
+    print(tabla)        
+    consulta = (
+            "SELECT * FROM "+tabla+" where fecha = %s and hora = %s limit 1"
+        )
+    cursor.execute(consulta,(now.strftime('%Y-%m-%d'),horaNoche))
+    values = cursor.fetchall()
+    print(cursor.mogrify(consulta,(now.strftime('%Y-%m-%d'),horaNoche)))
+    nocheValues={}
+    if values:
+        columnas = [column[0] for column in cursor.description]
+        primera_fila = values[0]
+        nocheValues = dict(zip(columnas, primera_fila))
+    nocheValues["fecha"]=now.strftime('%Y-%m-%d')
+    objetos=[mañanaValues,medioValues,tardeValues,nocheValues]
+    response = JsonResponse(objetos,safe=False)
 
     response["Access-Control-Allow-Origin"] = "*"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
