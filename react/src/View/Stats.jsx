@@ -108,13 +108,12 @@ export default function Stats() {
     axios
       .get("https://tesjo-clima-api.onrender.com/api/todayValues")
       .then(function (response) {
-        setNext48values(response.data);
+        setTodayValues(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [next48values]);
-
+  }, [todayValues]);
   var abreviatura = "am";
   if (currentValues["hora"] > 12) {
     abreviatura = "pm";
@@ -294,7 +293,7 @@ export default function Stats() {
             >
               <p>Mañana</p>
               <h1>
-                {getPeriod() === "Mañana" ? currentValues["temperatura"] : "12"}
+              {getPeriod() === "Mañana" ? currentValues?.["temperatura"] ?? "NA" : todayValues?.[0]?.["temperatura"] ?? "NA"}
               </h1>
               {cloudSun}
               <p>---*</p>
@@ -304,9 +303,10 @@ export default function Stats() {
                 getPeriod() === "Tarde" ? "highlight" : ""
               }`}
             >
-              <p>Tarde</p>
+              <p>Medio Dia</p>
               <h1>
-                {getPeriod() === "Tarde" ? currentValues["temperatura"] : "12"}
+                {getPeriod() === "Tarde"
+                  ?  currentValues?.["temperatura"] ?? "NA" : todayValues?.[1]?.["temperatura"] ?? "NA"}
               </h1>
               {cloudSun}
               <p>---*</p>
@@ -316,9 +316,10 @@ export default function Stats() {
                 getPeriod() === "Noche" ? "highlight" : ""
               }`}
             >
-              <p>Noche</p>
+              <p>Tarde</p>
               <h1>
-                {getPeriod() === "Noche" ? currentValues["temperatura"] : "12"}
+                {getPeriod() === "Noche"
+                  ?  currentValues?.["temperatura"] ?? "NA" : todayValues?.[2]?.["temperatura"] ?? "NA"}
               </h1>
               {cloudSun}
               <p>---*</p>
@@ -328,11 +329,10 @@ export default function Stats() {
                 getPeriod() === "Madrugada" ? "highlight" : ""
               }`}
             >
-              <p>Madrugada</p>
+              <p>Noche</p>
               <h1>
                 {getPeriod() === "Madrugada"
-                  ? currentValues["temperatura"]
-                  : "12"}
+                  ?  currentValues?.["temperatura"] ?? "NA" : todayValues?.[3]?.["temperatura"] ?? "NA"}
               </h1>
               {cloudSun}
               <p>---*</p>

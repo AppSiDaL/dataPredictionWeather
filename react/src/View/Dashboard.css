@@ -8,7 +8,7 @@
   grid-gap: 10px;
 }
 .confort >div {
-  width: auto;
+  width: min-content;
   font-size: 30px;
   padding: .5em;
   color: #ffffff;

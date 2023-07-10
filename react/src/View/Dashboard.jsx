@@ -247,16 +247,6 @@ export default function Dashboard() {
       });
   });
 
-  useEffect(() => {
-    axios
-      .get("http://localhost/weather/getNextDaysMin.php")
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   function setIcon(probabilidad) {
     if (probabilidad >= 40 && probabilidad < 70 && tiempo !== "Noche") {

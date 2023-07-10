@@ -77,7 +77,7 @@ def currentValues(request):
     return response
 
 
-def next48Values(response):
+def next48Values(request):
     now = datetime.now(zona)
     conexion = conectar_bd()
     contador=0
@@ -123,18 +123,6 @@ def next48Values(response):
     # Devolver la respuesta
     return response
 
-def apiBridge(request):
-    fecha = request.GET.get('fecha')
-    hora = request.GET.get('hora')
-    minuto = request.GET.get('minuto')
-    direccion = request.GET.get('direccion')
-    humedad = request.GET.get('humedad')
-    lluvia = request.GET.get('lluvia')
-    luz = request.GET.get('luz')
-    presion = request.GET.get('presion')
-    temperatura = request.GET.get('temperatura')
-    velocidad = request.GET.get('velocidad')
-    return HttpResponse('Param1: {}, Param2: {}'.format(fecha, hora))
 
 def bridge(request):
     url ='https://eu-central.aws.thinger.io:443/oauth/token'
@@ -295,6 +283,82 @@ def todayValues(request):
     nocheValues["fecha"]=now.strftime('%Y-%m-%d')
     objetos=[mañanaValues,medioValues,tardeValues,nocheValues]
     response = JsonResponse(objetos,safe=False)
+
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+
+    # Devolver la respuesta
+    return response
+
+def nextRains(request):    
+    now = datetime.now(zona)
+    conexion = conectar_bd()
+    contador=0
+    data={}
+    horaActual=now.hour
+    for i in range(48):
+        contador=contador+1
+        hora=horaActual+contador
+        if hora>23:
+            now = (now+ timedelta(days=1))
+            hora=hora-24
+            horaActual=0
+            contador=0
+        if now.month==12:
+            now =(now + timedelta(years=1)) 
+        cursor = conexion.cursor()
+        consulta = (
+            "SELECT * FROM tabla_predicciones where fecha = %s and hora = %s"
+        )
+        print (now.strftime('%Y,%m,%d')+" "+str(hora))
+        cursor.execute(consulta,(now.strftime('%Y-%m-%d'),str(hora)))
+        datos1 = cursor.fetchall()
+        averageDireccion=0
+        averageHumedad=0
+        averageLluvia=0
+        averageLuz=0
+        averagePresion=0
+        averageTemperatura=0
+        averageVelocidad=0
+        if datos1:
+            columnas = [column[0] for column in cursor.description]
+            primera_fila = datos1[0]
+            valores = dict(zip(columnas, primera_fila))
+
+        for valor in valores:
+            averageDireccion=averageDireccion+valores["direccion"]
+            averageHumedad=averageHumedad+valores["humedad"]
+            averageLluvia=averageLluvia+valores["lluvia"]
+            averageLuz=averageLuz+valores["luz"]
+            averagePresion=averagePresion+valores["presion"]
+            averageTemperatura=averageTemperatura+valores["temperatura"]
+            averageVelocidad=averageVelocidad+valores["velocidad"]
+            
+        averageDireccion=averageDireccion/len(valores)
+        averageHumedad=averageHumedad/len(valores)
+        averageLluvia=averageLluvia/len(valores)
+        averageLuz=averageLuz/len(valores)
+        averagePresion=averagePresion/len(valores)
+        averageTemperatura=averageTemperatura/len(valores)
+        averageVelocidad=averageVelocidad/len(valores)
+        averageDireccion=round(averageDireccion)
+        averageHumedad=round(averageHumedad)
+        averageLluvia=round(averageLluvia)
+        averageLuz==round(averageLuz)
+        averagePresion=round(averagePresion)
+        averageTemperatura=round(averageTemperatura)
+        averageVelocidad=round(averageVelocidad)
+        data["fecha"+str(i+1)]=now.strftime('%Y-%m-%d')
+        data["hora"+str(i+1)]=hora
+        data["averageDireccion"+str(i+1)]=averageDireccion
+        data["averageHumedad"+str(i+1)]=averageHumedad
+        data["averageLluvia"+str(i+1)]=averageLluvia
+        data["averageLuz"+str(i+1)]=averageLuz
+        data["averagePresion"+str(i+1)]=averagePresion
+        data["averageTemperatura"+str(i+1)]=averageTemperatura
+        data["averageVelocidad"+str(i+1)]=averageVelocidad
+    response = JsonResponse(data)
 
     response["Access-Control-Allow-Origin"] = "*"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
