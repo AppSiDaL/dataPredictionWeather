@@ -334,7 +334,7 @@ def nextRains(request):
             averagePresion=averagePresion+valores["presion"]
             averageTemperatura=averageTemperatura+valores["temperatura"]
             averageVelocidad=averageVelocidad+valores["velocidad"]
-            
+
         averageDireccion=averageDireccion/len(valores)
         averageHumedad=averageHumedad/len(valores)
         averageLluvia=averageLluvia/len(valores)
@@ -349,6 +349,22 @@ def nextRains(request):
         averagePresion=round(averagePresion)
         averageTemperatura=round(averageTemperatura)
         averageVelocidad=round(averageVelocidad)
+        probabilidad_lluvia=0
+        if averageHumedad > 80:
+            probabilidad_lluvia += 30
+
+        if averageLuz < 60:
+            probabilidad_lluvia += 20
+
+        if averagePresion < 730:
+            probabilidad_lluvia += 10
+
+        if averageTemperatura < 15:
+            probabilidad_lluvia += 10
+
+        if averageVelocidad > 5:
+            probabilidad_lluvia += 30
+
         data["fecha"+str(i+1)]=now.strftime('%Y-%m-%d')
         data["hora"+str(i+1)]=hora
         data["averageDireccion"+str(i+1)]=averageDireccion
@@ -358,6 +374,7 @@ def nextRains(request):
         data["averagePresion"+str(i+1)]=averagePresion
         data["averageTemperatura"+str(i+1)]=averageTemperatura
         data["averageVelocidad"+str(i+1)]=averageVelocidad
+        data["probabilidad"+str(i+1)]=probabilidad_lluvia
     response = JsonResponse(data)
 
     response["Access-Control-Allow-Origin"] = "*"

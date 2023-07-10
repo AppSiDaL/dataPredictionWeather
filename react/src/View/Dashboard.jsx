@@ -217,7 +217,7 @@ export default function Dashboard() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://localhost/weather/getNextLluvias.php")
+      .get("https://tesjo-clima-api.onrender.com/api/nextRains")
       .then(function (response) {
         const nuevasLluvias = [];
         for (let i = 1; i < 25; i++) {
